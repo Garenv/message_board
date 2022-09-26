@@ -19,6 +19,9 @@ class AuthController extends Controller
     public function login(Request $request) {
 
         try {
+
+            $email = $request->get('email');
+
             $credentials = $request->validate([
                 'email' => 'required',
                 'password' => 'required'
@@ -32,7 +35,12 @@ class AuthController extends Controller
                 ]);
             }
 
-            return $request->user();
+            $modelUser = User::where('email', $email)->firstOrFail();
+            $createToken    = $modelUser->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                "token" => $createToken,
+            ]);
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -41,6 +49,11 @@ class AuthController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     public function register(Request $request) {
 
         try {

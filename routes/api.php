@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ThreadController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +21,11 @@ Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']);
 
 // Auth routes
-Route::post('createThread', [ThreadController::class, 'createThread']);
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group( function () {
+    Route::get('getUser/{userId}', [UserController::class, 'getUser']);
+    Route::post('createThread', [ThreadController::class, 'createThread']);
+    Route::get('getThreadMessages/{threadId}', [ThreadController::class, 'getThreadMessages']);
+    Route::get('getUserThreads/{userId}', [ThreadController::class, 'getUserThreads']);
+    Route::post('createThreadMessage/{threadId}', [ThreadController::class, 'createThreadMessage']);
+    Route::get('searchThreadMessages/{threadId}', [ThreadController::class, 'searchThreadMessages']);
 });
