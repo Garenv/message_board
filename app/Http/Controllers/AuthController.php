@@ -57,15 +57,11 @@ class AuthController extends Controller
     public function register(Request $request) {
 
         try {
-            $email = $request->get('email');
-            $password = $request->get('password');
-            $fullName = $request->get('full_name');
-            $bio = $request->get('bio');
 
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email|unique:users',
-                'password' => 'required|min:12',
-                'full_name' => 'required',
+                'password' => ['required', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/'],
+                'full_name' => 'required|regex:/^[\p{L}\s-]+$/u',
                 'bio' => 'required',
             ]);
 
@@ -73,9 +69,26 @@ class AuthController extends Controller
                 $failedRules = $validator->failed();
 
                 if (isset($failedRules['email']['Unique'])) {
-                    return response()->json(['status' => 'failed', 'message' => 'Looks like you already have an account!'], 400);
+                    return response()->json(['message' => 'Looks like you already have an account!'], 400);
+                }
+
+                if(isset($failedRules['full_name']['Regex'])) {
+                    return response()->json(['message' => 'Your full name can only contain letters!'], 400);
+                }
+
+                if (isset($failedRules['password']['Min'])) {
+                    return response()->json(['message' => 'Enter a password with at least 8 characters!'], 400);
+                }
+
+                if(isset($failedRules['password']['Regex'])) {
+                    return response()->json(['message' => 'Please make sure you have at least 1 lowercase and 1 uppercase and 1 number and 1 symbol!'], 400);
                 }
             }
+
+            $email = $request->get('email');
+            $password = $request->get('password');
+            $fullName = $request->get('full_name');
+            $bio = $request->get('bio');
 
             $dataToInsert = [
                 'email' => $email,
@@ -99,10 +112,14 @@ class AuthController extends Controller
             Log::error($e->getMessage());
             throw new \Exception($e->getMessage(), $e->getCode(), $e);
         }
-
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout() {
-        Auth::logout();
+        auth()->user()->tokens()->delete();
+
+        return response()->json(['message' => 'You have successfully logged out and the token was successfully deleted']);
     }
 }

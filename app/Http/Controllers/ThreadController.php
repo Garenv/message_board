@@ -42,6 +42,8 @@ class ThreadController extends Controller
      * @return mixed
      */
     public function createThreadMessage($threadId) {
+        // Example endpoint below
+        // http://127.0.0.1:8000/api/createThreadMessage/4?userId=2&body=someTest
         $userId = request()->query('userId');
         $body = request()->query('body');
         $givenThread = Thread::findOrFail($threadId);
@@ -65,4 +67,5 @@ class ThreadController extends Controller
             ->where('body', 'LIKE', '%' . $searchText . '%')
             ->get();
     }
+
 }

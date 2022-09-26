@@ -17,12 +17,12 @@ use App\Http\Controllers\UserController;
 */
 
 Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']);
 
 // Auth routes
 Route::middleware('auth:sanctum')->group( function () {
     Route::get('getUser/{userId}', [UserController::class, 'getUser']);
+    Route::post('logout', [AuthController::class, 'logout']);
     Route::post('createThread', [ThreadController::class, 'createThread']);
     Route::get('getThreadMessages/{threadId}', [ThreadController::class, 'getThreadMessages']);
     Route::get('getUserThreads/{userId}', [ThreadController::class, 'getUserThreads']);
