@@ -83,6 +83,12 @@ class AuthController extends Controller
                 if(isset($failedRules['password']['Regex'])) {
                     return response()->json(['message' => 'Please make sure you have at least 1 lowercase and 1 uppercase and 1 number and 1 symbol!'], 400);
                 }
+
+                /**
+                 * Doug - Validations that don't match the explicitly checked ones aren't being handled. Causes
+                 * code to continue executing.  Eg pass no parameters and this throws an exception when it tries
+                 * to create a User with a null email.
+                 */
             }
 
             $email = $request->get('email');
@@ -109,6 +115,10 @@ class AuthController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            /**
+             * Doug - Catching and re-throwing ValidationExceptions is causing me to get 500 responses with no
+             * messages.  No real need for this.
+             */
             Log::error($e->getMessage());
             throw new \Exception($e->getMessage(), $e->getCode(), $e);
         }

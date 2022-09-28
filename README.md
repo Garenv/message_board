@@ -29,3 +29,7 @@ Example of how some endpoints will look like:
 - `http://127.0.0.1:8000/api/getThreadMessages/2`
 
 Please refer to the `api.php` file to see how other endpoints are set up.
+
+```
+Doug - I haven't found requirement 5 anywhere, the extra feature of your choice
+```

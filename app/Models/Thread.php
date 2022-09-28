@@ -9,6 +9,9 @@ class Thread extends Model
 {
     use HasFactory;
 
+    /**
+     * Doug - It's not wrong per-se, but why fight what Laravel expects here? Why not just use 'threads'?
+     */
     // Need to explicitly state table name to not throw errors during insertion
     // since Laravel adds plurals to table names by default
     protected $table = 'thread';

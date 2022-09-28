@@ -9,6 +9,9 @@ class ThreadController extends Controller
      * @return Thread
      */
     public function createThread() {
+        /**
+         * Doug - No validation, what if title is missing, empty, etc.
+         */
         $threadModel = new Thread();
         $title = request()->get('title');
 
@@ -42,6 +45,9 @@ class ThreadController extends Controller
      * @return mixed
      */
     public function createThreadMessage($threadId) {
+        /**
+         * Doug - No input validation
+         */
         // Example endpoint below
         // http://127.0.0.1:8000/api/createThreadMessage/4?userId=2&body=someTest
         $userId = request()->query('userId');

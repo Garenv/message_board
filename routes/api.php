@@ -21,6 +21,9 @@ Route::post('register', [AuthController::class, 'register']);
 
 // Auth routes
 Route::middleware('auth:sanctum')->group( function () {
+    /**
+     * Doug - Endpoints aren't organized in a RESTful pattern
+     */
     Route::get('getUser/{userId}', [UserController::class, 'getUser']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('createThread', [ThreadController::class, 'createThread']);
